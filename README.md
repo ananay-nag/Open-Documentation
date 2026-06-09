@@ -11,4 +11,4 @@
 ## Git Idendity Manager - gflip
 #### A command-line tool to easily manage multiple Git profiles.
 - Orgnal repository- [gflip](https://github.com/ananay-nag/gflip#git-flip-gflip)
-- Vercel deployment- [gflip](https://redheart-ananay.github.io/gflip/)
+- Vercel deployment- [gflip](https://gflip-doc.vercel.app/)
