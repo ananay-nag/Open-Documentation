@@ -1,0 +1,19 @@
+{
+  "v1.0.0": {
+    "options": [
+      {
+        "name": "useViewport",
+        "type": "boolean",
+        "default": "false",
+        "desc": "Use window inner dims instead of physical screen dims."
+      }
+    ],
+    "objects": [
+      { "name": "width", "type": "number", "desc": "Screen width in pixels" },
+      { "name": "height", "type": "number", "desc": "Screen height in pixels" },
+      { "name": "diagonal", "type": "number", "desc": "Approximate diagonal in inches" },
+      { "name": "orientation", "type": "\"portrait\" | \"landscape\"", "desc": "Current screen mode" },
+      { "name": "online", "type": "boolean", "desc": "Browser network status" }
+    ]
+  }
+}
