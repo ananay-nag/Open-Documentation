@@ -23,7 +23,6 @@ import "./App.css";
 import apiDocsData from "./data/apiDocs.json";
 
 const VERSIONS = Object.keys(apiDocsData);
-const package_ver = import.meta.env.VITE_PACKAGE_VER || "0.0.0";
 
 export default function App() {
   const latestVersion = VERSIONS[VERSIONS.length - 1];
@@ -104,7 +103,7 @@ export default function App() {
           </div>
         </header>
 
-        <Docs package_ver={package_ver} selectedVersion={selectedVersion} />
+        <Docs selectedVersion={selectedVersion} />
       </main>
     </div>
   );
@@ -134,7 +133,7 @@ function VersionDropdown({ selectedVersion, onSelect, versions }: any) {
   );
 }
 
-function Docs({ package_ver, selectedVersion }: { package_ver: string, selectedVersion: string }) {
+function Docs({ selectedVersion }: {selectedVersion: string }) {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = (text: string) => {
@@ -397,7 +396,7 @@ const DEVICE_STATES = [
   },
 ];
 
-const DeviceSandbox = ({ selectedVersion, copyToClipboard, copied }: any) => {
+const DeviceSandbox = ({ selectedVersion, copyToClipboard }: any) => {
   const [index, setIndex] = useState(0);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
