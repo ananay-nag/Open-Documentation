@@ -1,0 +1,82 @@
+[
+  {
+    "version": "v1.0.0",
+    "date": "2026-06-16",
+    "isLatest": true,
+    "features": [
+      {
+        "id": "installation",
+        "title": "1. Installation & Prerequisites",
+        "description": [
+          "To get started, you need to install both the plugin and the core Socket.IO package. This plugin acts as a seamless bridge between Fastify's rapid HTTP server and Socket.IO's persistent real-time engine.",
+          "Run the following command in your terminal to install the necessary dependencies:"
+        ],
+        "code": "npm i @ananay-nag/fastify-socket-io socket.io",
+        "language": "bash"
+      },
+      {
+        "id": "basic-setup",
+        "title": "2. Basic Setup (Line-by-Line)",
+        "description": [
+          "Let's break down a basic implementation line by line.",
+          "1. First, we initialize our Fastify application.",
+          "2. Next, we register the `@ananay-nag/fastify-socket-io` plugin. You can pass any standard Socket.IO server options here (like CORS rules).",
+          "3. The `connectionHandler` is a custom hook provided by this plugin. It automatically fires the moment a new client connects, giving you direct access to the `socket` object.",
+          "4. Finally, we start the Fastify server. The plugin automatically hooks into Fastify's lifecycle, meaning when Fastify shuts down gracefully, your Socket.IO server will gracefully terminate all connections too."
+        ],
+        "code": "const fastify = require('fastify')({ logger: true })\n\n// Register the plugin\nfastify.register(require('@ananay-nag/fastify-socket-io'), {\n  cors: {\n    origin: '*',\n    credentials: true\n  },\n  // This function is called immediately upon a successful connection\n  connectionHandler (socket) {\n    fastify.log.info(`Client connected: ${socket.id}`)\n    \n    socket.on('disconnect', () => {\n      fastify.log.info(`Client disconnected: ${socket.id}`)\n    })\n  }\n})\n\n// Start the server\nfastify.listen({ port: 3000 })",
+        "language": "javascript"
+      },
+      {
+        "id": "jwt-auth",
+        "title": "3. Advanced: JWT Authentication Hook",
+        "description": [
+          "In production environments, you cannot trust anonymous socket connections. This plugin features a native, zero-friction integration with `@fastify/jwt`.",
+          "By setting `jwtAuth: true`, the plugin injects a global Socket.IO middleware that runs before the `connectionHandler`.",
+          "Line-by-line flow:",
+          "1. The client attempts a WebSocket handshake, passing a token via `auth.token` or the `Authorization: Bearer` header.",
+          "2. The plugin intercepts the handshake and extracts the token.",
+          "3. It uses your existing `fastify.jwt` instance to verify the signature.",
+          "4. If valid, the decoded payload is securely attached to `socket.data.user`, allowing you to instantly know exactly who is communicating without doing manual database lookups in your event listeners."
+        ],
+        "code": "fastify.register(require('@fastify/jwt'), { secret: 'super-secure-secret' })\n\nfastify.register(require('@ananay-nag/fastify-socket-io'), {\n  jwtAuth: true, // Enables the automated security hook\n  connectionHandler (socket) {\n    // The payload is already verified and decoded for you!\n    const userId = socket.data.user.id;\n    fastify.log.info(`Authenticated User ID ${userId} connected.`);\n  }\n})",
+        "language": "javascript"
+      },
+      {
+        "id": "state-recovery",
+        "title": "4. Resilient Connection State Recovery",
+        "description": [
+          "Mobile networks drop. Wi-Fi connections stutter. Connection State Recovery ensures your users don't lose data during transient disconnects.",
+          "When enabled, the server temporarily buffers events sent to a client while disconnected. If the client reconnects within the timeout window, the server automatically resends the buffered events and restores their room memberships.",
+          "This happens natively in memory without requiring an external Redis adapter, making it perfect for single-instance Node.js deployments."
+        ],
+        "code": "fastify.register(require('@ananay-nag/fastify-socket-io'), {\n  // Setting this to true enables optimal default recovery settings\n  connectionStateRecovery: {\n    maxDisconnectionDuration: 2 * 60 * 1000, // 2 minutes\n    skipMiddlewares: true // Skip middlewares upon successful recovery\n  }\n})",
+        "language": "javascript"
+      },
+      {
+        "id": "typescript",
+        "title": "5. Strongly Typed Events (TypeScript)",
+        "description": [
+          "For enterprise teams, type safety is non-negotiable. Our plugin natively exports a generic wrapper to strongly type your entire real-time architecture.",
+          "1. `ClientToServerEvents`: Defines what the server is allowed to listen for (`socket.on`).",
+          "2. `ServerToClientEvents`: Defines what the server is allowed to emit (`socket.emit`).",
+          "3. `InterServerEvents`: Defines events sent between multiple server instances.",
+          "4. `SocketData`: Strictly defines the shape of `socket.data` (e.g., your JWT user payload).",
+          "Once registered with these generics, your IDE will provide auto-complete for event names and throw compiler errors if you attempt to emit invalid payloads."
+        ],
+        "code": "import Fastify from 'fastify'\nimport fastifySocketIO from '@ananay-nag/fastify-socket-io'\n\ninterface ClientEvents { hello: () => void; }\ninterface ServerEvents { basicEmit: (a: number, b: string) => void; }\ninterface InterEvents { ping: () => void; }\ninterface SocketData { user: { id: string, role: string }; }\n\nconst fastify = Fastify()\n\n// Fastify automatically infers the types for fastify.io!\nfastify.register(fastifySocketIO<\n  ClientEvents,\n  ServerEvents,\n  InterEvents,\n  SocketData\n>)",
+        "language": "typescript"
+      },
+      {
+        "id": "live-demo",
+        "title": "6. Live Demo Integration",
+        "description": [
+          "Want to see it in action right now? We have a live production deployment of the Fastify Socket.IO secure chat example running on Render.",
+          "You can connect your own Socket.IO client directly to this live URL to test out the persistent WebSocket connection in real-time."
+        ],
+        "code": "// Connect to the live production server\nimport { io } from \"socket.io-client\";\n\nconst socket = io(\"https://fastify-socket-io.onrender.com\", {\n  // Pass your JWT token if the route requires authentication\n  auth: {\n    token: \"your-jwt-token\"\n  }\n});\n\nsocket.on(\"connect\", () => {\n  console.log(\"Successfully connected to the live Render server!\");\n});",
+        "language": "javascript"
+      }
+    ]
+  }
+]
