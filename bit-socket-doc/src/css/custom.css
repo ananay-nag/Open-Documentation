@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --ifm-color-primary: #6366f1;
+  --ifm-color-primary-dark: #4f46e5;
+  --ifm-color-primary-darker: #4338ca;
+  --ifm-color-primary-darkest: #3730a3;
+  --ifm-color-primary-light: #818cf8;
+  --ifm-color-primary-lighter: #93c5fd;
+  --ifm-color-primary-lightest: #a5f3fc;
+  --ifm-code-font-size: 92%;
+  --docusaurus-highlighted-code-line-bg: rgba(99, 102, 241, 0.1);
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --ifm-font-family-heading: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --ifm-background-color: #f8fafc;
+  --ifm-navbar-background-color: rgba(255, 255, 255, 0.8);
+  --ifm-navbar-sidebar-background-color: #ffffff;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #818cf8;
+  --ifm-color-primary-dark: #6366f1;
+  --ifm-color-primary-darker: #4f46e5;
+  --ifm-color-primary-darkest: #4338ca;
+  --ifm-color-primary-light: #93c5fd;
+  --ifm-color-primary-lighter: #a5f3fc;
+  --ifm-color-primary-lightest: #cffafe;
+  --docusaurus-highlighted-code-line-bg: rgba(129, 140, 248, 0.2);
+  --ifm-background-color: #0f172a;
+  --ifm-navbar-background-color: rgba(15, 23, 42, 0.8);
+  --ifm-navbar-sidebar-background-color: #0f172a;
+}
+
+/* Glassmorphic Navbar */
+.navbar {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .navbar {
+  border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+}
+
+/* Beautiful custom scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: #475569;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* Enhancements for Doc Card & content links */
+.theme-doc-sidebar-item-link-active {
+  background-color: rgba(99, 102, 241, 0.1) !important;
+  border-left: 3px solid var(--ifm-color-primary);
+}
+
+[data-theme='dark'] .theme-doc-sidebar-item-link-active {
+  background-color: rgba(129, 140, 248, 0.15) !important;
+}
+
+/* Code block adjustments */
+.codeBlockContainer_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-styles-module {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  overflow: hidden;
+}
