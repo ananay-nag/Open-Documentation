@@ -8,6 +8,7 @@
 ### 2. [React-Voice-Recorder](#react-voice-recorder)
 ### 3. [Web Device Info](#web-device-info)
 ### 4. [Fastify-socket-io](#fasify-socket-io)
+### 5. [Bit-Socket]()
 ---
 
 
@@ -31,3 +32,9 @@
 - Original repository- [fastify-socket-io](https://github.com/ananay-nag/fastify-socket-io/blob/main/README.md#ananay-nagfastify-socket-io)
 - Vercel deployment- [fastify-socket-io](https://fastify-socket-io-doc.vercel.app/)
 - NPM repository- [@ananay-nag/fastify-socket-io](https://www.npmjs.com/package/@ananay-nag/fastify-socket-io)
+
+## Bit Socket
+#### A high-performance, schema-driven, binary WebSocket framework for Node.js, Golang, Python. BitSocket provides the developer experience of Socket.io but with Protobuf-level network compression. By leveraging a strict Schema Engine, BitSocket drops JSON completely, stripping keys and formatting to deliver up to an 80% reduction in network payload size.
+
+- Original repository- [bit-socket](https://github.com/ananay-nag/bit-socket/blob/main/README.md)
+- Vercel deployment- [bit-socket](https://bit-socket-doc.vercel.app/)
