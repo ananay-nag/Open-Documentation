@@ -87,7 +87,7 @@ BitSocket allows defining layout schemas to serialize data strictly without keys
 ### Server Setup with Middleware & Schema
 
 ```javascript
-import { BitSocketServer, Schema } from '@msgpack/msgpack';
+import { BitSocketServer, Schema } from 'bit-socket';
 
 const io = new BitSocketServer({ port: 6001 });
 
@@ -123,7 +123,7 @@ io.of('/user').on('connection', (socket) => {
 ### Client Connection
 
 ```javascript
-import { BitSocketClient } from '@msgpack/msgpack';
+import { BitSocketClient } from 'bit-socket';
 
 const client = new BitSocketClient('ws://localhost:6001', {
   nsp: '/user',

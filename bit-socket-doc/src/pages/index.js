@@ -155,7 +155,7 @@ export default function Home() {
     node: {
       title: "Node.js Server Setup",
       file: "server.js",
-      code: `import { BitSocketServer, Schema } from 'bit-socket-node';
+      code: `import { BitSocketServer, Schema } from 'bit-socket';
 
 const io = new BitSocketServer({ port: 6001 });
 

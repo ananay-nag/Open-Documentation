@@ -54,6 +54,6 @@ BitSocket is implemented natively in three major languages:
 
 | Language | Module / Package | Repository Folder |
 | :--- | :--- | :--- |
-| **Node.js** | `@msgpack/msgpack`, `fflate`, `ws` | `bit-socket-node` |
+| **Node.js** | `@msgpack/msgpack`, `fflate`, `ws` | `bit-socket` |
 | **Go** | `bitsocket` module | `bit-socket-go` |
 | **Python** | `bitsocket` package | `bit-socket-python` |
