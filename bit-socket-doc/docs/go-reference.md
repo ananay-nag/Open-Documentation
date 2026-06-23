@@ -2,7 +2,7 @@
 sidebar_position: 2
 sidebar_label: Go API
 ---
-# Go API Reference
+# Go API Reference [![GitHub](https://img.shields.io/badge/GitHub--181717?logo=github&style=flat-square)](https://github.com/ananay-nag/bit-socket-go)
 
 The Go port of BitSocket is divided into three primary packages: `server`, `client`, and `protocol`. It is designed to offer the same conceptual API shape, adapted for standard Go patterns (type safety, explicit handlers, and concurrency).
 

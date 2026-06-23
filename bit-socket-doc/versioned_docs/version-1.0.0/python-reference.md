@@ -2,7 +2,7 @@
 sidebar_position: 4
 sidebar_label: Python API Reference
 ---
-# Python API Reference
+# Python API Reference [![GitHub](https://img.shields.io/badge/GitHub--181717?logo=github&style=flat-square)](https://github.com/ananay-nag/bit-socket-python)
 
 The Python implementation of BitSocket is built on the `websockets` library and utilizes Python's `asyncio` framework for asynchronous networking.
 
