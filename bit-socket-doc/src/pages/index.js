@@ -155,7 +155,7 @@ export default function Home() {
     node: {
       title: "Node.js Server Setup",
       file: "server.js",
-      code: `import { BitSocketServer, Schema } from 'bit-socket';
+      code: `import { BitSocketServer, Schema } from '@ananay-nag/bit-socket-node';
 
 const io = new BitSocketServer({ port: 6001 });
 
@@ -176,8 +176,8 @@ io.of('/user').on('connection', (socket) => {
 
 import (
 	"fmt"
-	"bitsocket/protocol"
-	"bitsocket/server"
+	"github.com/ananay-nag/bit-socket-go/protocol"
+	"github.com/ananay-nag/bit-socket-go/server"
 )
 
 func main() {
