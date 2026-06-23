@@ -1,5 +1,5 @@
 // @ts-check
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -94,10 +94,6 @@ const config = {
           {
             title: 'Community',
             items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/bit-socket',
-              },
             ],
           },
           {
@@ -106,6 +102,18 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/ananay-nag/bit-socket',
+              },
+              {
+                label: 'Node API GitHub',
+                href: 'https://github.com/ananay-nag/bit-socket-node',
+              },
+              {
+                label: 'Python API GitHub',
+                href: 'https://github.com/ananay-nag/bit-socket-python.git',
+              },
+              {
+                label: 'Go API GitHub',
+                href: 'https://github.com/ananay-nag/bit-socket-go.git',
               },
             ],
           },
