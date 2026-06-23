@@ -104,8 +104,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"bitsocket/protocol"
-	"bitsocket/server"
+	"github.com/ananay-nag/bit-socket-go/protocol"
+	"github.com/ananay-nag/bit-socket-go/server"
 )
 
 func main() {
@@ -152,7 +152,7 @@ import (
 	"net/http"
 	"time"
 
-	"bitsocket/client"
+	"github.com/ananay-nag/bit-socket-go/client"
 )
 
 func main() {

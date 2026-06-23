@@ -50,10 +50,10 @@ Every frame traversing the WebSocket channel follows this exact memory block lay
 
 ## Language Ports & Packages
 
-BitSocket is implemented natively in three major languages:
+BitSocket is implemented natively in three major languages. Each port is hosted in its own repository and can be installed via its respective package manager:
 
-| Language | Module / Package | Repository Folder |
+| Language | Package / Installation | GitHub Repository |
 | :--- | :--- | :--- |
-| **Node.js** | `@msgpack/msgpack`, `fflate`, `ws` | `bit-socket` |
-| **Go** | `bitsocket` module | `bit-socket-go` |
-| **Python** | `bitsocket` package | `bit-socket-python` |
+| **Node.js** | [`@ananay-nag/bit-socket-node`](https://www.npmjs.com/package/@ananay-nag/bit-socket-node) <br/>`npm install @ananay-nag/bit-socket-node` | [ananay-nag/bit-socket-node](https://github.com/ananay-nag/bit-socket-node) |
+| **Go** | [`github.com/ananay-nag/bit-socket-go`](https://pkg.go.dev/github.com/ananay-nag/bit-socket-go) <br/>`go get github.com/ananay-nag/bit-socket-go` | [ananay-nag/bit-socket-go](https://github.com/ananay-nag/bit-socket-go) |
+| **Python** | [`bit-socket-python`](https://pypi.org/project/bit-socket-python/) <br/>`pip install bit-socket-python` | [ananay-nag/bit-socket-python](https://github.com/ananay-nag/bit-socket-python) |
