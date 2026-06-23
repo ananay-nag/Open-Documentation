@@ -2,7 +2,8 @@
 sidebar_position: 3
 sidebar_label: Node API Reference
 ---
-# Node.js API Reference
+
+# Node.js API Reference [![GitHub](https://img.shields.io/badge/GitHub--181717?logo=github&style=flat-square)](https://github.com/ananay-nag/bit-socket-node)
 
 The Node.js implementation of BitSocket provides a high-performance websocket server and client designed to mimic the programming style of Socket.io, transferring raw binary frames over the wire.
 
