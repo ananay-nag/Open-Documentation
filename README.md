@@ -8,7 +8,8 @@
 ### 2. [React-Voice-Recorder](#react-voice-recorder)
 ### 3. [Web Device Info](#web-device-info)
 ### 4. [Fastify-socket-io](#fasify-socket-io)
-### 5. [Bit-Socket]()
+### 5. [Bit-Socket](#bit-socket)
+### 6. [MCP Decorators](#mcp-decorators)
 ---
 
 
@@ -38,3 +39,9 @@
 
 - Original repository- [bit-socket](https://github.com/ananay-nag/bit-socket/blob/main/README.md)
 - Vercel deployment- [bit-socket](https://bit-socket-doc.vercel.app/)
+
+## MCP Decorators
+#### A powerful, TypeScript-native decorator library to simplify and supercharge your Model Context Protocol (MCP) server and client development. `@ananay-nag/mcp-decorators` enables clean, declarative class-based structures, completely removing repetitive boilerplate for request handling, client calls, resource serving, notifications, autocompletions, and capabilities registration.
+
+- Original repository- [mcp-decorators](https://github.com/ananay-nag/mcp-decorators/blob/main/README.md)
+- Vercel deployment- [mcp-decorators](https://mcp-decorators-doc.vercel.app/)
