@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 transition-colors duration-200 antialiased;
+  }
+  body.dark {
+    background-color: #0B0F19;
+    @apply text-slate-100;
+  }
+}
+
+/* Premium scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+@layer utilities {
+  .text-mcp-primary {
+    color: #4F46E5 !important;
+  }
+  .text-mcp-primary-light {
+    color: #818CF8 !important;
+  }
+  .text-mcp-accent {
+    color: #06B6D4 !important;
+  }
+  .text-mcp-accent-light {
+    color: #22D3EE !important;
+  }
+  .text-mcp-secondary {
+    color: #7C3AED !important;
+  }
+  .bg-mcp-primary {
+    background-color: #4F46E5 !important;
+  }
+  .bg-mcp-primary-light {
+    background-color: #818CF8 !important;
+  }
+  .bg-mcp-accent {
+    background-color: #06B6D4 !important;
+  }
+  .bg-mcp-dark {
+    background-color: #0B0F19 !important;
+  }
+}

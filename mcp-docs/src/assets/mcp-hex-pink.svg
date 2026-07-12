@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <!-- Deep dark blue gradient for the hexagon frame -->
+    <linearGradient id="darkBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2942" />
+      <stop offset="100%" stop-color="#1e3a8a" />
+    </linearGradient>
+    
+    <!-- Vibrant pink-to-magenta gradient for the official loop shape -->
+    <linearGradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f472b6" /> <!-- Pink-400 -->
+      <stop offset="50%" stop-color="#db2777" /> <!-- Pink-600 -->
+      <stop offset="100%" stop-color="#9d174d" /> <!-- Pink-800 -->
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Encapsulation Hexagon Outline (Dark Blue) -->
+  <path d="M 50,12 
+           L 83,31 
+           L 83,69 
+           L 50,88 
+           L 17,69 
+           L 17,31 Z" 
+        fill="none" 
+        stroke="url(#darkBlueGrad)" 
+        stroke-width="4.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" />
+
+  <!-- 2. Nested Official MCP Logo shape (Pink Gradient) -->
+  <g transform="translate(50, 50) scale(0.72) translate(-50, -50)">
+    <g transform="rotate(-45, 50, 50)">
+      <path d="M 28 25 
+               H 64 
+               A 8 8 0 0 1 64 41 
+               H 36 
+               A 8 8 0 0 0 36 57 
+               H 72 
+               A 8 8 0 0 1 72 73 
+               H 44" 
+            fill="none" 
+            stroke="url(#pinkGrad)" 
+            stroke-width="7.5" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" />
+    </g>
+  </g>
+</svg>
