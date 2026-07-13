@@ -7,9 +7,10 @@ import { BackgroundAnimation } from './BackgroundAnimation';
 
 interface LandingPageProps {
   onGoToDocs: () => void;
+  defaultVersion: string
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onGoToDocs }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onGoToDocs, defaultVersion }) => {
   const [copied, setCopied] = useState(false);
 
   // Smooth mouse follow calculations
@@ -111,7 +112,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToDocs }) => {
               className="flex items-center gap-2 px-3.5 py-1.5 bg-mcp-primary/10 dark:bg-mcp-primary-light/10 text-mcp-primary dark:text-mcp-primary-light rounded-full text-xs font-semibold mb-6 border border-mcp-primary/15 dark:border-mcp-primary-light/15 shadow-sm"
             >
               <Zap className="h-3.5 w-3.5 text-mcp-primary" />
-              <span>Compatible with MCP Typescript SDK v2.0.0</span>
+              <span>Compatible with MCP Typescript SDK {defaultVersion}</span>
             </motion.div>
 
             <motion.h1
@@ -156,6 +157,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToDocs }) => {
                 <span>View on GitHub</span>
               </a>
             </motion.div>
+
           </div>
         </section>
 
@@ -184,6 +186,56 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGoToDocs }) => {
             </button>
           </div>
         </motion.section>
+
+        {/* Shields & Badges */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+          className="flex flex-wrap justify-center items-center gap-3.5 mt-4 mb-10 max-w-3xl mx-auto px-6 text-center"
+        >
+          <a
+            href="https://www.npmjs.com/package/@ananay-nag/mcp-decorators"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-all duration-200 hover:scale-105 hover:brightness-105 active:scale-95 hover:shadow-sm"
+          >
+            <img src="https://img.shields.io/npm/v/@ananay-nag/mcp-decorators.svg?color=cb3837&style=flat-square" alt="npm version" className="h-[26px] rounded" />
+          </a>
+          <a
+            href="https://www.npmjs.com/package/@ananay-nag/mcp-decorators"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-all duration-200 hover:scale-105 hover:brightness-105 active:scale-95 hover:shadow-sm"
+          >
+            <img src="https://img.shields.io/node/v/@ananay-nag/mcp-decorators.svg?color=339933&style=flat-square" alt="node compatibility" className="h-[26px] rounded" />
+          </a>
+          <a
+            href="https://github.com/ananay-nag/mcp-decorators/actions/workflows/test.yml"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-all duration-200 hover:scale-105 hover:brightness-105 active:scale-95 hover:shadow-sm"
+          >
+            <img src="https://img.shields.io/github/actions/workflow/status/ananay-nag/mcp-decorators/test.yml.svg?style=flat-square" alt="build status" className="h-[26px] rounded" />
+          </a>
+          <a
+            href="https://github.com/ananay-nag/mcp-decorators/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-all duration-200 hover:scale-105 hover:brightness-105 active:scale-95 hover:shadow-sm"
+          >
+            <img src="https://img.shields.io/github/issues/ananay-nag/mcp-decorators.svg?color=2ea44f&style=flat-square" alt="github issues" className="h-[26px] rounded" />
+          </a>
+          <a
+            href="https://github.com/ananay-nag/mcp-decorators/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-all duration-200 hover:scale-105 hover:brightness-105 active:scale-95 hover:shadow-sm"
+          >
+            <img src="https://img.shields.io/github/license/ananay-nag/mcp-decorators.svg?color=6f42c1&style=flat-square" alt="license" className="h-[26px] rounded" />
+          </a>
+        </motion.div>
 
         {/* Code Editor Comparison Panel */}
         <section className="bg-slate-150/50 dark:bg-slate-900/30 border-y border-slate-200/50 dark:border-slate-800/40 py-12">
