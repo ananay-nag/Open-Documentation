@@ -40,7 +40,7 @@ import { CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 
 const server = new Server(
-  { name: "calc-server", version: "1.0.0" },
+  { name: "calc-server", version: "2.0.1" },
   { capabilities: { tools: {} } }
 );
 
@@ -77,7 +77,7 @@ const result = await controller.addNumbers(5, 10);`,
   original: `import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 
 const client = new Client(
-  { name: "calc-client", version: "1.0.0" },
+  { name: "calc-client", version: "2.0.1" },
   { capabilities: {} }
 );
 

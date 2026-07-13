@@ -1,4 +1,4 @@
-{
+export default {
   "version": "1.0.0",
   "isLatest": false,
   "isDeprecated": true,
@@ -299,4 +299,4 @@
       ]
     }
   ]
-}
+};
