@@ -5,9 +5,11 @@ import { ContentArea } from './components/Content/ContentArea';
 import { LandingPage } from './components/Landing/LandingPage';
 import { Footer } from './components/Footer/Footer';
 
-// Dynamically load all JSON documentation datasets
-const docsModules = import.meta.glob<{ default: any }>('./doc-data/*.json', { eager: true });
-const allDocs = Object.values(docsModules).map((mod) => mod.default);
+// Dynamically load all TypeScript documentation datasets
+const docsModules = import.meta.glob<{ default: any }>('./doc-data/*.ts', { eager: true });
+const allDocs = Object.values(docsModules)
+  .map((mod) => mod.default)
+  .filter((doc) => doc && doc.version);
 
 // Sort versions: isLatest at the top, then remaining descending
 const sortedDocs = [...allDocs].sort((a, b) => {
@@ -17,7 +19,7 @@ const sortedDocs = [...allDocs].sort((a, b) => {
 });
 
 const defaultDoc = sortedDocs.find((doc) => doc.isLatest) || sortedDocs[0];
-const defaultVersion = defaultDoc ? defaultDoc.version : '2.0.0';
+const defaultVersion = defaultDoc ? defaultDoc.version : '2.0.1';
 
 const versionsList = sortedDocs.map((d) => ({
   version: d.version,
@@ -198,6 +200,7 @@ export const App: React.FC = () => {
             setActiveTab('docs');
             handlePageChange(activeDocs.sections[0].id, activeDocs.sections[0].items[0].id);
           }}
+          defaultVersion={defaultVersion}
         />
       ) : (
         <div className="flex-grow flex w-full max-w-[90rem] mx-auto min-w-0 min-h-0">
