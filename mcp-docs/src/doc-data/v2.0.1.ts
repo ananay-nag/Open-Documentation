@@ -68,7 +68,7 @@ const developerGuideSection = {
 
 export default {
   "version": "2.0.1",
-  "isLatest": true,
+  "isLatest": false,
   "isDeprecated": false,
   "title": "MCP Decorators v2.0.1 (McpServer SDK)",
   "sections": [...getV2CommonSections("2.0.1"), developerGuideSection]
