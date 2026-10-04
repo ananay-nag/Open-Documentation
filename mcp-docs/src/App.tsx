@@ -19,7 +19,7 @@ const sortedDocs = [...allDocs].sort((a, b) => {
 });
 
 const defaultDoc = sortedDocs.find((doc) => doc.isLatest) || sortedDocs[0];
-const defaultVersion = defaultDoc ? defaultDoc.version : '2.0.1';
+const defaultVersion = defaultDoc ? defaultDoc.version : '2.0.2';
 
 const versionsList = sortedDocs.map((d) => ({
   version: d.version,

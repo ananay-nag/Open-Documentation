@@ -152,6 +152,11 @@ export default {
           "title": "HTTP / SSE serving",
           "content": [
             { "type": "paragraph", "text": "Integrate with modern frameworks to serve over HTTP and Server-Sent Events (SSE)." },
+            {
+              "type": "alert",
+              "style": "note",
+              "text": "Note on Modern Runtimes: In SDK v2+, HTTP transport is modernized with `StreamableHTTPServerTransport` (Node.js) and `WebStandardStreamableHTTPServerTransport` (Web Standards runtimes), superseding legacy SSEServerTransport."
+            },
             { "type": "heading", "level": 3, "text": "Express Integration" },
             { "type": "code", "language": "typescript", "code": "app.get(\"/sse\", async (req, res) => {\n  transport = new SSEServerTransport(\"/messages\", res);\n  await server.connect(transport);\n});\n\napp.post(\"/messages\", async (req, res) => {\n  await transport.handleMessage(req, res);\n});" }
           ]
