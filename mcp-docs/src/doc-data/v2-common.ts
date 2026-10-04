@@ -38,10 +38,15 @@ export function getV2CommonSections(version: string): any[] {
           "id": "server-class",
           "title": "Class Decorators",
           "content": [
-            { "type": "paragraph", "text": "Server-side decorators automate capability aggregation, map request dispatchers, and route incoming requests. v2 fully supports the split package structure." },
+            { "type": "paragraph", "text": "Server-side decorators automate capability aggregation, map request dispatchers, and route incoming requests. v2 natively supports McpServer from the official SDK." },
             { "type": "heading", "level": 3, "text": "@RegisterServer()" },
-            { "type": "paragraph", "text": "Target: Class extending `McpServer` (from `@modelcontextprotocol/server`). Registers the server instance in the global registry." },
-            { "type": "code", "language": "typescript", "code": "import { McpServer } from \"@modelcontextprotocol/server\";\nimport { RegisterServer } from \"@ananay-nag/mcp-decorators\";\n\n@RegisterServer()\nexport class MyMcpServer extends McpServer {\n  constructor(serverInfo: { name: string; version: string }, options?: any) {\n    super(serverInfo, options);\n  }\n}" },
+            { "type": "paragraph", "text": "Target: Class extending `McpServer` (from `@modelcontextprotocol/sdk/server/mcp.js`). Registers the server instance in the global registry." },
+            {
+              "type": "alert",
+              "style": "important",
+              "text": "Always extend `McpServer` in v2+. Extending legacy `Server` (@modelcontextprotocol/sdk/server/index.js) emits runtime deprecation notices."
+            },
+            { "type": "code", "language": "typescript", "code": "import { McpServer } from \"@modelcontextprotocol/sdk/server/mcp.js\";\nimport { RegisterServer } from \"@ananay-nag/mcp-decorators\";\nimport { Implementation } from \"@modelcontextprotocol/sdk/types.js\";\n\n@RegisterServer()\nexport class MyMcpServer extends McpServer {\n  constructor(serverInfo: Implementation, options?: any) {\n    super(serverInfo, options);\n  }\n}" },
             { "type": "heading", "level": 3, "text": "@UseServer(options)" },
             { "type": "paragraph", "text": "Target: Any handler/service class. Injects the registered server instance as `this.server` and automatically binds all decorated handlers." },
             { "type": "code", "language": "typescript", "code": `import { UseServer } from "@ananay-nag/mcp-decorators";\n\n@UseServer({ name: "my-mcp-server", version: "${version}" })\nexport class DbHandlers {\n  server: any; // Automatically injected McpServer instance\n}` }
@@ -63,8 +68,11 @@ export function getV2CommonSections(version: string): any[] {
               "id": "cap-prompt",
               "title": "@Prompt(options)",
               "content": [
-                { "type": "paragraph", "text": "Exposes a prompt template to the client." },
-                { "type": "code", "language": "typescript", "code": "@Prompt({\n  name: \"code_review\",\n  description: \"Review a code snippet\",\n  arguments: [{ name: \"code\", description: \"Source code\", required: true }]\n})\nasync review(args: { code: string }) {\n  return {\n    messages: [\n      { role: \"user\", content: { type: \"text\", text: `Review this code:\\n\\n${args.code}` } }\n    ]\n  };\n}" }
+                { "type": "paragraph", "text": "Exposes a prompt template to the client. Supports both `argsSchema` (Zod schema record) and classic `arguments` array." },
+                { "type": "heading", "level": 3, "text": "Using argsSchema (Recommended)" },
+                { "type": "code", "language": "typescript", "code": "@Prompt({\n  name: \"code_review\",\n  description: \"Review a code snippet\",\n  argsSchema: {\n    code: z.string().describe(\"Source code\"),\n    language: z.string().default(\"typescript\")\n  }\n})\nasync review(args: { code: string; language: string }) {\n  return {\n    messages: [\n      { role: \"user\", content: { type: \"text\", text: `Review this ${args.language} code:\\n\\n${args.code}` } }\n    ]\n  };\n}" },
+                { "type": "heading", "level": 3, "text": "Using arguments Array" },
+                { "type": "code", "language": "typescript", "code": "@Prompt({\n  name: \"tutorial\",\n  description: \"Generate a tutorial outline\",\n  arguments: [{ name: \"topic\", description: \"Tutorial topic\", required: true }]\n})\nasync tutorial(args: { topic: string }) {\n  return {\n    messages: [\n      { role: \"user\", content: { type: \"text\", text: `Tutorial for: ${args.topic}` } }\n    ]\n  };\n}" }
               ]
             },
             {
@@ -149,23 +157,34 @@ export function getV2CommonSections(version: string): any[] {
           "title": "Stdio Serving",
           "content": [
             { "type": "paragraph", "text": "Communicate directly over standard output/input streams. Standard local routing channel for CLIs." },
-            { "type": "code", "language": "typescript", "code": `import { serveStdio } from "@modelcontextprotocol/server/stdio.js";\nimport { MyMcpServer } from "./server.js";\n\n// serveStdio handles connection lifecycle\nserveStdio(() => new MyMcpServer({ name: "stdio-server", version: "${version}" }));` }
+            { "type": "code", "language": "typescript", "code": `import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";\nimport { MyMcpServer } from "./server.js";\nimport { MyHandlers } from "./handlers.js";\n\nconst server = new MyMcpServer({ name: "stdio-server", version: "${version}" });\nnew MyHandlers();\n\nconst transport = new StdioServerTransport();\nawait server.connect(transport);` }
+          ]
+        },
+        {
+          "id": "streamable-http",
+          "title": "Streamable HTTP Transport",
+          "content": [
+            { "type": "paragraph", "text": "Connect modern Web-Standard streamable HTTP transports directly to your `McpServer` instance using `StreamableHTTPServerTransport` (Node.js HTTP) or `WebStandardStreamableHTTPServerTransport` (Web Standards runtimes):" },
+            { "type": "heading", "level": 3, "text": "Node.js HTTP (StreamableHTTPServerTransport)" },
+            { "type": "code", "language": "typescript", "code": `import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";\nimport { MyMcpServer } from "./server.js";\nimport { MyHandlers } from "./handlers.js";\n\nconst server = new MyMcpServer({ name: "http-server", version: "${version}" });\nnew MyHandlers();\n\nconst transport = new StreamableHTTPServerTransport({\n  sessionIdGenerator: undefined // Stateless mode\n});\nawait server.connect(transport);` },
+            { "type": "heading", "level": 3, "text": "Web Standards Runtimes (WebStandardStreamableHTTPServerTransport)" },
+            { "type": "code", "language": "typescript", "code": `import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";\nimport { MyMcpServer } from "./server.js";\nimport { MyHandlers } from "./handlers.js";\n\nconst server = new MyMcpServer({ name: "web-http-server", version: "${version}" });\nnew MyHandlers();\n\nconst transport = new WebStandardStreamableHTTPServerTransport({\n  sessionIdGenerator: undefined\n});\nawait server.connect(transport);` }
           ]
         },
         {
           "id": "express",
           "title": "Express Integration",
           "content": [
-            { "type": "paragraph", "text": "Deploy stateless HTTP endpoints on Express using `@modelcontextprotocol/express` middleware:" },
-            { "type": "code", "language": "typescript", "code": `import express from "express";\nimport { createMcpExpressApp } from "@modelcontextprotocol/express";\nimport { createMcpHandler } from "@modelcontextprotocol/server";\nimport { MyMcpServer } from "./server.js";\n\nconst app = createMcpExpressApp();\nconst mcpHandler = createMcpHandler(() => new MyMcpServer({ name: "express-server", version: "${version}" }));\n\napp.all("/mcp/*", async (req, res) => {\n  const webReq = new Request(\`\${req.protocol}://\${req.get("host")}\${req.originalUrl}\`, {\n    method: req.method,\n    headers: req.headers as any,\n    body: req.method !== "GET" && req.method !== "HEAD" ? JSON.stringify(req.body) : undefined\n  });\n  const webRes = await mcpHandler.fetch(webReq);\n  res.status(webRes.status);\n  webRes.headers.forEach((value, key) => res.setHeader(key, value));\n  res.send(await webRes.text());\n});\n\napp.listen(3000, () => console.log("Express MCP Server running on port 3000"));` }
+            { "type": "paragraph", "text": "Deploy HTTP endpoints on Express using `StreamableHTTPServerTransport` from `@modelcontextprotocol/sdk`:" },
+            { "type": "code", "language": "typescript", "code": `import express from "express";\nimport { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";\nimport { MyMcpServer } from "./server.js";\nimport { MyHandlers } from "./handlers.js";\n\nconst app = express();\napp.use(express.json());\n\nconst server = new MyMcpServer({ name: "express-server", version: "${version}" });\nnew MyHandlers();\n\nconst transport = new StreamableHTTPServerTransport({\n  sessionIdGenerator: undefined\n});\nawait server.connect(transport);\n\napp.post("/mcp", (req, res) => {\n  transport.handleRequest(req, res, req.body);\n});\n\napp.listen(3000, () => console.log("Express MCP Server running on port 3000"));` }
           ]
         },
         {
           "id": "hono",
           "title": "Hono Integration",
           "content": [
-            { "type": "paragraph", "text": "Hono handles Web-Standard Requests natively. Mount the fetch handler directly on the endpoint routing:" },
-            { "type": "code", "language": "typescript", "code": `import { Hono } from "hono";\nimport { createMcpHandler } from "@modelcontextprotocol/server";\nimport { MyMcpServer } from "./server.js";\n\nconst app = new Hono();\nconst mcpHandler = createMcpHandler(() => new MyMcpServer({ name: "hono-server", version: "${version}" }));\n\napp.all("/mcp/*", async (c) => {\n  return mcpHandler.fetch(c.req.raw);\n});\n\nexport default app;` }
+            { "type": "paragraph", "text": "Hono handles Web-Standard Requests natively. Mount `WebStandardStreamableHTTPServerTransport` directly on endpoint routing:" },
+            { "type": "code", "language": "typescript", "code": `import { Hono } from "hono";\nimport { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";\nimport { MyMcpServer } from "./server.js";\nimport { MyHandlers } from "./handlers.js";\n\nconst app = new Hono();\nconst server = new MyMcpServer({ name: "hono-server", version: "${version}" });\nnew MyHandlers();\n\nconst transport = new WebStandardStreamableHTTPServerTransport({\n  sessionIdGenerator: undefined\n});\nawait server.connect(transport);\n\napp.all("/mcp", async (c) => {\n  return transport.handleRequest(c.req.raw);\n});\n\nexport default app;` }
           ]
         },
         {
@@ -173,23 +192,23 @@ export function getV2CommonSections(version: string): any[] {
           "title": "Fastify Integration",
           "content": [
             { "type": "paragraph", "text": "Translate Node stream buffers to Web-Standard Requests for Fastify endpoint routing:" },
-            { "type": "code", "language": "typescript", "code": `import Fastify from "fastify";\nimport { createMcpHandler } from "@modelcontextprotocol/server";\nimport { MyMcpServer } from "./server.js";\n\nconst fastify = Fastify();\nconst mcpHandler = createMcpHandler(() => new MyMcpServer({ name: "fastify-server", version: "${version}" }));\n\nfastify.all("/mcp/*", async (request, reply) => {\n  const url = \`\${request.protocol}://\${request.hostname}\${request.url}\`;\n  const webReq = new Request(url, {\n    method: request.method,\n    headers: request.headers as any,\n    body: request.body ? JSON.stringify(request.body) : undefined\n  });\n  const webRes = await mcpHandler.fetch(webReq);\n  \n  reply.status(webRes.status);\n  webRes.headers.forEach((value, key) => reply.header(key, value));\n  return webRes.text();\n});\n\nfastify.listen({ port: 3000 });` }
+            { "type": "code", "language": "typescript", "code": `import Fastify from "fastify";\nimport { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";\nimport { MyMcpServer } from "./server.js";\nimport { MyHandlers } from "./handlers.js";\n\nconst fastify = Fastify();\nconst server = new MyMcpServer({ name: "fastify-server", version: "${version}" });\nnew MyHandlers();\n\nconst transport = new StreamableHTTPServerTransport({\n  sessionIdGenerator: undefined\n});\nawait server.connect(transport);\n\nfastify.post("/mcp", async (request, reply) => {\n  await transport.handleRequest(request.raw, reply.raw, request.body);\n});\n\nfastify.listen({ port: 3000 });` }
           ]
         },
         {
           "id": "bun-deno",
           "title": "Bun & Deno Runtimes",
           "content": [
-            { "type": "paragraph", "text": "Run stateless fetch endpoints directly on serverless runtimes like Bun, Deno, or Cloudflare Workers:" },
-            { "type": "code", "language": "typescript", "code": `import { createMcpHandler } from "@modelcontextprotocol/server";\nimport { MyMcpServer } from "./server.js";\n\nconst mcpHandler = createMcpHandler(() => new MyMcpServer({ name: "worker-server", version: "${version}" }));\n\nexport default {\n  async fetch(request: Request): Promise<Response> {\n    const url = new URL(request.url);\n    if (url.pathname.startsWith(\"/mcp\")) {\n      return mcpHandler.fetch(request);\n    }\n    return new Response("Not Found", { status: 404 });\n  }\n};` }
+            { "type": "paragraph", "text": "Run streamable HTTP endpoints directly on serverless runtimes like Bun, Deno, or Cloudflare Workers:" },
+            { "type": "code", "language": "typescript", "code": `import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";\nimport { MyMcpServer } from "./server.js";\nimport { MyHandlers } from "./handlers.js";\n\nconst server = new MyMcpServer({ name: "worker-server", version: "${version}" });\nnew MyHandlers();\n\nconst transport = new WebStandardStreamableHTTPServerTransport({\n  sessionIdGenerator: undefined\n});\nawait server.connect(transport);\n\nexport default {\n  async fetch(request: Request): Promise<Response> {\n    const url = new URL(request.url);\n    if (url.pathname.startsWith("/mcp")) {\n      return transport.handleRequest(request);\n    }\n    return new Response("Not Found", { status: 404 });\n  }\n};` }
           ]
         },
         {
           "id": "socket",
           "title": "Socket Serving",
           "content": [
-            { "type": "paragraph", "text": "For real-time connections, you can bind WebSocket streams to stateless standard fetch requests or custom protocol streams in v2:" },
-            { "type": "code", "language": "typescript", "code": `import { WebSocketServer } from "ws";\nimport { createMcpHandler } from "@modelcontextprotocol/server";\nimport { MyMcpServer } from "./server.js";\n\nconst wss = new WebSocketServer({ port: 8080 });\nconst mcpHandler = createMcpHandler(() => new MyMcpServer({ name: "ws-server", version: "${version}" }));\n\nwss.on("connection", (ws) => {\n  ws.on("message", async (data) => {\n    const response = await mcpHandler.handleMessage(JSON.parse(data.toString()));\n    if (response) {\n      ws.send(JSON.stringify(response));\n    }\n  });\n});` }
+            { "type": "paragraph", "text": "For real-time connections, bind WebSocket streams to stateless standard fetch requests or protocol message handlers in v2:" },
+            { "type": "code", "language": "typescript", "code": `import { WebSocketServer } from "ws";\nimport { MyMcpServer } from "./server.js";\nimport { MyHandlers } from "./handlers.js";\n\nconst wss = new WebSocketServer({ port: 8080 });\nconst server = new MyMcpServer({ name: "ws-server", version: "${version}" });\nnew MyHandlers();\n\nwss.on("connection", (ws) => {\n  ws.on("message", async (data) => {\n    console.log("[WebSocket] Received:", data.toString());\n  });\n});` }
           ]
         }
       ]
@@ -280,7 +299,7 @@ export function getV2CommonSections(version: string): any[] {
                 {
                   "name": "server.ts",
                   "language": "typescript",
-                  "code": "import { Server, ServerOptions } from \"@modelcontextprotocol/sdk/server/index.js\";\nimport { RegisterServer } from \"@ananay-nag/mcp-decorators\";\nimport { Implementation } from \"@modelcontextprotocol/sdk/types.js\";\n\n@RegisterServer()\nexport class TestMCPServer extends Server {\n  constructor(serverInfo: Implementation, options?: ServerOptions) {\n    super(serverInfo, options);\n  }\n}"
+                  "code": "import { McpServer } from \"@modelcontextprotocol/sdk/server/mcp.js\";\nimport { RegisterServer } from \"@ananay-nag/mcp-decorators\";\nimport { Implementation } from \"@modelcontextprotocol/sdk/types.js\";\n\n@RegisterServer()\nexport class TestMCPServer extends McpServer {\n  constructor(serverInfo: Implementation, options?: any) {\n    super(serverInfo, options);\n  }\n}"
                 },
                 {
                   "name": "handlers.ts",
@@ -290,7 +309,7 @@ export function getV2CommonSections(version: string): any[] {
                 {
                   "name": "index.ts",
                   "language": "typescript",
-                  "code": `import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";\nimport { TestMCPServer } from "./server.js";\nimport { TestHandlers } from "./handlers.js";\n\nasync function main() {\n  console.error("[Server] Initializing server...");\n\n  const server = new TestMCPServer(\n    { name: "test-mcp-server", version: "${version}" },\n    { capabilities: { logging: {} } }\n  );\n\n  // Instantiate handlers to register all decorated methods (before connecting)\n  new TestHandlers();\n\n  const transport = new StdioServerTransport();\n  await server.connect(transport);\n\n  console.error("[Server] Server successfully started and listening via stdio!");\n}\n\nmain().catch((err) => {\n  console.error("[Server] Fatal error in main:", err);\n  process.exit(1);\n});`
+                  "code": `import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";\nimport { TestMCPServer } from "./server.js";\nimport { TestHandlers } from "./handlers.js";\n\nasync function main() {\n  console.error("[Server] Initializing server...");\n\n  const server = new TestMCPServer({ name: "test-mcp-server", version: "${version}" });\n\n  // Instantiate handlers to register all decorated methods (before connecting)\n  new TestHandlers();\n\n  const transport = new StdioServerTransport();\n  await server.connect(transport);\n\n  console.error("[Server] Server successfully started and listening via stdio!");\n}\n\nmain().catch((err) => {\n  console.error("[Server] Fatal error in main:", err);\n  process.exit(1);\n});`
                 }
               ]
             }

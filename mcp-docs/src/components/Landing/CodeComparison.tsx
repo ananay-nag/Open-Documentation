@@ -11,14 +11,14 @@ interface ComparisonData {
 
 const SERVER_COMP: ComparisonData = {
   decoratorFile: "calculator-server.ts",
-  decorators: `import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+  decorators: `import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { RegisterServer, UseServer, Tool } from "@ananay-nag/mcp-decorators";
 import { z } from "zod";
 
 @RegisterServer()
-export class CalculatorServer extends Server {}
+export class CalculatorServer extends McpServer {}
 
-@UseServer({ name: "calc-server" })
+@UseServer({ name: "calc-server", version: "2.0.2" })
 export class CalcHandlers {
   @Tool({
     name: "add",
@@ -35,24 +35,28 @@ export class CalcHandlers {
   }
 }`,
   originalFile: "server-monolith.ts",
-  original: `import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js";
+  original: `import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-const server = new Server(
-  { name: "calc-server", version: "2.0.1" },
-  { capabilities: { tools: {} } }
+const server = new McpServer(
+  { name: "calc-server", version: "2.0.2" }
 );
 
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  if (request.params.name === "add") {
-    const args = request.params.arguments as any;
+server.registerTool(
+  "add",
+  {
+    description: "Add two numbers",
+    inputSchema: {
+      a: z.number(),
+      b: z.number()
+    }
+  },
+  async (args) => {
     return {
       content: [{ type: "text", text: String(args.a + args.b) }]
     };
   }
-  throw new Error("Tool not found");
-});`
+);`
 };
 
 const CLIENT_COMP: ComparisonData = {
@@ -63,7 +67,7 @@ import { RegisterClient, UseClient, CallTool } from "@ananay-nag/mcp-decorators"
 @RegisterClient()
 export class AppClient extends Client {}
 
-@UseClient({ name: "calc-client" })
+@UseClient({ name: "calc-client", version: "2.0.2" })
 export class AppController {
   client: any;
 
@@ -77,7 +81,7 @@ const result = await controller.addNumbers(5, 10);`,
   original: `import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 
 const client = new Client(
-  { name: "calc-client", version: "2.0.1" },
+  { name: "calc-client", version: "2.0.2" },
   { capabilities: {} }
 );
 
